@@ -21,6 +21,8 @@ export default function ClientCreationFormPage() {
       State: "",
       zipCode: "",
       country: "",
+       products: [], // to store selected products
+
     });
 
   return (
@@ -42,16 +44,24 @@ export default function ClientCreationFormPage() {
           }}
         />
       )}
+{currentStep === 2 && (
+  <StepTwoPage
+    selectedProducts={companyFormValues.products}
+    setSelectedProducts={(products) =>
+      setCompanyFormValues((prev) => ({
+        ...prev,
+        products,
+      }))
+    }
+    onPrevious={() => setCurrentStep(1)}
+    onNext={() => {
+      console.log("STEP 2 PRODUCTS:", companyFormValues);
+      setCurrentStep(3);
+      setMaxReachedStep(3);
+    }}
+  />
+)}
 
-      {currentStep === 2 && (
-        <StepTwoPage
-          onPrevious={() => setCurrentStep(1)}
-          onNext={() => {
-            setCurrentStep(3);
-            setMaxReachedStep(3);
-          }}
-        />
-      )}
 
       {currentStep === 3 && (
         <StepThree

@@ -7,4 +7,10 @@ export type CompanyFormValues = {
   State: string;
   zipCode: string;
   country: string;
+  products: ProductWithPlan[]; 
+};
+
+export type ProductWithPlan = {
+  product: string;
+  plan: "silver" | "gold" | "platinum";
 };
