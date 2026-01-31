@@ -3,16 +3,14 @@
 import { useState } from "react";
 import useFormValidation from "@/hooks/useFormValidation";
 
-type CompanyFormValues = {
-  companyName: string;
-  companyNumber: string;
-  deptName: string;
-  StreetAdress: string;
-  City: string;
-  State: string;
-  zipCode: string;
-  country: string;
+import { CompanyFormValues } from "@/app/client-creation-form/type/step1form";
+
+type Props = {
+  values: CompanyFormValues;
+  setValues: React.Dispatch<React.SetStateAction<CompanyFormValues>>;
+  onNext: () => void;
 };
+
 
 // Regex patterns
 const patterns = {
@@ -33,7 +31,7 @@ const validateCompanyForm = (values: CompanyFormValues) => {
   if (!values.companyNumber)
     errors.companyNumber = "Company Number is required";
   if (!values.deptName) errors.deptName = "Department Name is required";
-  if (!values.StreetAdress) errors.StreetAdress = "Street Address is required";
+  if (!values.StreetAddress) errors.StreetAddress = "Street Address is required";
   if (!values.City) errors.City = "City is required";
   if (!values.State) errors.State = "State is required";
   if (!values.zipCode) errors.zipCode = "Zip Code is required";
@@ -42,22 +40,19 @@ const validateCompanyForm = (values: CompanyFormValues) => {
   return errors;
 };
 
-export default function CompanyFormPage({ onNext }: { onNext: () => void }) {
-  const { values, errors, handleChange, handleSubmit } =
-    useFormValidation<CompanyFormValues>(
-      {
-        companyName: "",
-        companyNumber: "",
-        deptName: "",
-        StreetAdress: "",
-        City: "",
-        State: "",
-        zipCode: "",
-        country: "",
-      },
-      validateCompanyForm,
-      patterns,
-    );
+export default function CompanyFormPage({
+  values,
+  setValues,
+  onNext,
+}: Props) {
+ const { errors, handleChange, handleSubmit } =
+  useFormValidation<CompanyFormValues>(
+    values,
+    setValues,
+    validateCompanyForm,
+    patterns
+  );
+
 
   return (
     <div className="flex justify-center py-2">
@@ -111,12 +106,12 @@ export default function CompanyFormPage({ onNext }: { onNext: () => void }) {
           <div className="grid grid-cols-1 gap-3">
             <div className="col-span-1">
               <FloatingInput
-                id="StreetAdress"
-                name="StreetAdress"
+                id="StreetAddress"
+                name="StreetAddress"
                 label="Street Address"
-                value={values.StreetAdress}
+                value={values.StreetAddress}
                 onChange={handleChange}
-                error={errors.StreetAdress}
+                error={errors.StreetAddress}
               />
             </div>
             <div className="grid grid-cols-1 min-[320px]:grid-cols-2 gap-3">
