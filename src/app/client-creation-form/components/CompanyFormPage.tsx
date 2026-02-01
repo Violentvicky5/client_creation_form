@@ -1,37 +1,46 @@
 "use client";
 
-import { useState } from "react";
 import useFormValidation from "@/hooks/useFormValidation";
-
 import { CompanyFormValues } from "@/app/client-creation-form/type/step1form";
 
+/* ================= TYPES ================= */
+
 type Props = {
-  values: CompanyFormValues;
-  setValues: React.Dispatch<React.SetStateAction<CompanyFormValues>>;
+  values: CompanyFormValues["company_info"];
+  setValues: React.Dispatch<
+    React.SetStateAction<CompanyFormValues["company_info"]>
+  >;
   onNext: () => void;
 };
 
+/* ================= REGEX ================= */
 
-// Regex patterns
 const patterns = {
-  companyName: /^[A-Za-z\s]{5,}$/,       // Company name: only letters and spaces, minimum 5 characters
-  deptName: /^[A-Za-z\s]{2,}$/,          // Department name: only letters and spaces, minimum 2 characters
-  StreetAddress: /^[A-Za-z0-9\s,.-]+$/,  // Street address: letters, numbers, spaces, commas, dots, hyphens
-  City: /^[A-Za-z\s]{2,}$/,              // City: only letters and spaces, minimum 2 characters
-  State: /^[A-Za-z\s]{2,}$/,             // State: only letters and spaces, minimum 2 characters
-  country: /^[A-Za-z\s]{2,}$/,           // Country: only letters and spaces, minimum 2 characters
-  zipCode: /^\d{6}$/,                    // Zip code: exactly 6 digits
-  companyNumber: /^\d{10}$/,             // Company number: exactly 10 digits
+  companyName: /^[A-Za-z\s]{5,}$/,
+  deptName: /^[A-Za-z\s]{2,}$/,
+  StreetAddress: /^[A-Za-z0-9\s,.-]+$/,
+  City: /^[A-Za-z\s]{2,}$/,
+  State: /^[A-Za-z\s]{2,}$/,
+  country: /^[A-Za-z\s]{2,}$/,
+  zipCode: /^\d{6}$/,
+  companyNumber: /^\d{10}$/,
 };
 
-const validateCompanyForm = (values: CompanyFormValues) => {
-  const errors: Partial<Record<keyof CompanyFormValues, string>> = {};
+/* ================= VALIDATION ================= */
+
+const validateCompanyForm = (
+  values: CompanyFormValues["company_info"]
+) => {
+  const errors: Partial<
+    Record<keyof CompanyFormValues["company_info"], string>
+  > = {};
 
   if (!values.companyName) errors.companyName = "Company Name is required";
   if (!values.companyNumber)
     errors.companyNumber = "Company Number is required";
   if (!values.deptName) errors.deptName = "Department Name is required";
-  if (!values.StreetAddress) errors.StreetAddress = "Street Address is required";
+  if (!values.StreetAddress)
+    errors.StreetAddress = "Street Address is required";
   if (!values.City) errors.City = "City is required";
   if (!values.State) errors.State = "State is required";
   if (!values.zipCode) errors.zipCode = "Zip Code is required";
@@ -40,19 +49,17 @@ const validateCompanyForm = (values: CompanyFormValues) => {
   return errors;
 };
 
+/* ================= COMPONENT ================= */
+
 export default function CompanyFormPage({
   values,
   setValues,
   onNext,
 }: Props) {
- const { errors, handleChange, handleSubmit } =
-  useFormValidation<CompanyFormValues>(
-    values,
-    setValues,
-    validateCompanyForm,
-    patterns
-  );
-
+  const { errors, handleChange, handleSubmit } =
+    useFormValidation<
+      CompanyFormValues["company_info"]
+    >(values, setValues, validateCompanyForm, patterns);
 
   return (
     <div className="flex justify-center py-2">
@@ -77,6 +84,7 @@ export default function CompanyFormPage({
                 error={errors.companyName}
               />
             </div>
+
             <div className="grid grid-cols-1 min-[320px]:grid-cols-2 gap-3">
               <FloatingInput
                 id="companyNumber"
@@ -87,6 +95,7 @@ export default function CompanyFormPage({
                 onChange={handleChange}
                 error={errors.companyNumber}
               />
+
               <FloatingInput
                 id="deptName"
                 name="deptName"
@@ -114,6 +123,7 @@ export default function CompanyFormPage({
                 error={errors.StreetAddress}
               />
             </div>
+
             <div className="grid grid-cols-1 min-[320px]:grid-cols-2 gap-3">
               <FloatingInput
                 id="City"
@@ -123,6 +133,7 @@ export default function CompanyFormPage({
                 onChange={handleChange}
                 error={errors.City}
               />
+
               <FloatingInput
                 id="State"
                 name="State"
@@ -131,6 +142,7 @@ export default function CompanyFormPage({
                 onChange={handleChange}
                 error={errors.State}
               />
+
               <FloatingInput
                 id="zipCode"
                 name="zipCode"
@@ -140,6 +152,7 @@ export default function CompanyFormPage({
                 onChange={handleChange}
                 error={errors.zipCode}
               />
+
               <FloatingInput
                 id="country"
                 name="country"
@@ -166,7 +179,8 @@ export default function CompanyFormPage({
   );
 }
 
-/* Floating Input Component */
+/* ================= FLOATING INPUT ================= */
+
 function FloatingInput({
   id,
   name,

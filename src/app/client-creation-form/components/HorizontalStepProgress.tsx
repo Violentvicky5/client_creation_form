@@ -4,6 +4,7 @@ type HorizontalStepProgressProps = {
   currentStep: number;
   maxReachedStep: number;
   onStepChange: (step: 1 | 2 | 3 | 4) => void;
+  isStepFourSubmitted:boolean;
 };
 
 
@@ -18,13 +19,16 @@ export default function HorizontalStepProgress({
   currentStep,
   maxReachedStep,
   onStepChange,
+  isStepFourSubmitted,
 }: HorizontalStepProgressProps) {
 
   return (
     <div className="w-full max-w-[1200px] bg-white p-6 sm:p-8 md:p-10 rounded-4xl shadow-md overflow-hidden">
       <div className="flex items-center justify-center">
         {steps.map((step, index) => {
-          const isCompleted = step.id < currentStep;
+
+const isCompleted =
+  step.id < currentStep || (step.id === 4 && isStepFourSubmitted);
           const isCurrent = step.id === currentStep;
           const isDisabled = step.id > maxReachedStep;
 

@@ -1,47 +1,47 @@
 "use client";
 
 import useFormValidation from "@/hooks/useFormValidation";
-import { CompanyFormValues } from "@/app/client-creation-form/type/step1form";
-
-/* ================= TYPES ================= */
+import { AdminInfo } from "@/app/client-creation-form/type/step1form";
 
 type StepFourProps = {
-  values: CompanyFormValues["admin_info"];
-  setValues: React.Dispatch<React.SetStateAction<CompanyFormValues>>;
+  values: AdminInfo;
+  setValues: React.Dispatch<React.SetStateAction<AdminInfo>>;
   onPrevious: () => void;
-  onNext?: () => void;
+  onNext: () => void;
+  setIsStepFourSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 /* ================= VALIDATION ================= */
 
-const validateStepFour = (
-  values: CompanyFormValues["admin_info"]
-) => {
-  const errors: Partial<Record<keyof CompanyFormValues["admin_info"], string>> =
-    {};
+const validateStepFour = (values: AdminInfo) => {
+  const errors: Partial<Record<keyof AdminInfo, string>> = {};
 
   if (!values.firstName.trim()) errors.firstName = "First name is required";
   if (!values.lastName.trim()) errors.lastName = "Last name is required";
 
-  if (!values.phone.trim())
+  if (!values.phone.trim()) {
     errors.phone = "Phone number is required";
-  else if (!/^\d{10}$/.test(values.phone))
+  } else if (!/^\d{10}$/.test(values.phone)) {
     errors.phone = "Phone number must be 10 digits";
+  }
 
-  if (!values.email.trim())
+  if (!values.email.trim()) {
     errors.email = "Email is required";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
     errors.email = "Invalid email address";
+  }
 
-  if (!values.password)
+  if (!values.password) {
     errors.password = "Password is required";
-  else if (values.password.length < 6)
+  } else if (values.password.length < 6) {
     errors.password = "Password must be at least 6 characters";
+  }
 
-  if (!values.confirmPassword)
+  if (!values.confirmPassword) {
     errors.confirmPassword = "Confirm password is required";
-  else if (values.confirmPassword !== values.password)
+  } else if (values.confirmPassword !== values.password) {
     errors.confirmPassword = "Passwords do not match";
+  }
 
   return errors;
 };
@@ -53,33 +53,22 @@ export default function StepFour({
   setValues,
   onPrevious,
   onNext,
+  setIsStepFourSubmitted,
 }: StepFourProps) {
-
-  // ✅ scoped setter for admin_info (CRITICAL FIX)
-  const setAdminInfoValues = (
-    updater: React.SetStateAction<CompanyFormValues["admin_info"]>
-  ) => {
-    setValues((prev) => ({
-      ...prev,
-      admin_info:
-        typeof updater === "function"
-          ? updater(prev.admin_info)
-          : updater,
-    }));
-  };
-
-  const { errors, handleChange, handleSubmit } =
-    useFormValidation(
-      values,
-      setAdminInfoValues,
-      validateStepFour
-    );
+  const { errors, handleChange, handleSubmit } = useFormValidation(
+    values,
+    setValues,
+    validateStepFour
+  );
 
   return (
     <div className="min-h-screen flex justify-center py-6 mt-2">
       <form
-        onSubmit={handleSubmit(() => onNext?.())}
-        className="w-full max-w-[1200px] bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow-md"
+        onSubmit={handleSubmit(() => {
+          setIsStepFourSubmitted(true); 
+          onNext(); 
+        })}
+        className="w-full max-w-[1200px] bg-white p-6 rounded-lg shadow-md"
       >
         <h2 className="mb-2 text-xs font-semibold text-gray-600">
           Create Admin Info
@@ -87,7 +76,7 @@ export default function StepFour({
 
         <hr className="my-3 border-gray-200" />
 
-        <div className="grid gap-4 grid-cols-2 min-[768px]:grid-cols-3 min-[1024px]:grid-cols-4">
+        <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <FloatingInput
             id="firstName"
             name="firstName"
@@ -151,19 +140,17 @@ export default function StepFour({
           <button
             type="button"
             onClick={onPrevious}
-            className="w-16 h-7 py-1.5 bg-gray-500 text-white rounded text-xs hover:bg-gray-400 transition"
+            className="w-16 h-7 bg-gray-500 text-white rounded text-xs"
           >
             Previous
           </button>
 
-          {onNext && (
-            <button
-              type="submit"
-              className="w-20 h-7 py-1.5 bg-blue-700 text-white rounded text-xs hover:bg-blue-600 transition"
-            >
-              Submit
-            </button>
-          )}
+          <button
+            type="submit"
+            className="w-20 h-7 bg-blue-700 text-white rounded text-xs"
+          >
+            Submit
+          </button>
         </div>
       </form>
     </div>
@@ -203,10 +190,7 @@ function FloatingInput({
         />
         <label htmlFor={id}>{label}</label>
       </div>
-
-      {error && (
-        <p className="text-red-500 text-[10px] mt-1">{error}</p>
-      )}
+      {error && <p className="text-red-500 text-[10px] mt-1">{error}</p>}
     </div>
   );
 }
