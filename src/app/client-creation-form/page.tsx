@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HorizontalStepProgress from "./components/HorizontalStepProgress";
 import CompanyFormPage from "./components/CompanyFormPage";
 import StepTwoPage from "./components/StepTwoPage";
@@ -9,6 +9,7 @@ import StepFour from "./components/StepFour";
 import { CompanyFormValues } from "@/app/client-creation-form/type/step1form";
 
 export default function ClientCreationFormPage() {
+
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
   const [maxReachedStep, setMaxReachedStep] = useState<1 | 2 | 3 | 4>(1);
   const [companyFormValues, setCompanyFormValues] =
@@ -23,7 +24,22 @@ export default function ClientCreationFormPage() {
       country: "",
        products: [], // to store selected products
 
+          subscription_settings: {
+      billingCycle: "",
+      trialDays: "",
+      region: "",
+    },        // subscription settings
+    admin_info: {
+  firstName: "",
+  lastName: "",
+  phone: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+},
+
     });
+
 
   return (
     <>
@@ -38,7 +54,6 @@ export default function ClientCreationFormPage() {
           values={companyFormValues}
           setValues={setCompanyFormValues}
           onNext={() => {
-            console.log("STEP 1 VALUES:", companyFormValues);  //acess the values entered here
             setCurrentStep(2);
             setMaxReachedStep(2);
           }}
@@ -55,7 +70,6 @@ export default function ClientCreationFormPage() {
     }
     onPrevious={() => setCurrentStep(1)}
     onNext={() => {
-      console.log("STEP 2 PRODUCTS:", companyFormValues);
       setCurrentStep(3);
       setMaxReachedStep(3);
     }}
@@ -63,19 +77,37 @@ export default function ClientCreationFormPage() {
 )}
 
 
-      {currentStep === 3 && (
-        <StepThree
-          onPrevious={() => setCurrentStep(2)}
-          onNext={() => {
-            setCurrentStep(4);
-            setMaxReachedStep(4);
-          }}
-        />
-      )}
+     {currentStep === 3 && (
+  <StepThree
+    values={companyFormValues.subscription_settings}
+    setValues={(subscription_settings) =>
+      setCompanyFormValues((prev) => ({
+        ...prev,
+        subscription_settings,
+      }))
+    }
+    onPrevious={() => setCurrentStep(2)}
+    onNext={() => {
+      
+      setCurrentStep(4);
+      setMaxReachedStep(4);
+    }}
+  />
+)}
 
-      {currentStep === 4 && (
-        <StepFour onPrevious={() => setCurrentStep(3)} />
-      )}
+
+    {currentStep === 4 && (
+  <StepFour
+    values={companyFormValues.admin_info}
+    setValues={setCompanyFormValues}
+    onPrevious={() => setCurrentStep(3)}
+    onNext={() => {
+      console.log("FINAL SUBMIT:", companyFormValues);
+      // submit API call here
+    }}
+  />
+)}
+
     </>
   );
 }

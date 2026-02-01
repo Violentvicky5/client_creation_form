@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -61,9 +61,7 @@ export default function StepTwoPage({
   /* Update plan */
   const updatePlan = (product: string, plan: Plan) => {
     setLocalSelected((prev) =>
-      prev.map((p) =>
-        p.product === product ? { ...p, plan } : p
-      )
+      prev.map((p) => (p.product === product ? { ...p, plan } : p)),
     );
   };
 
@@ -74,7 +72,6 @@ export default function StepTwoPage({
       return;
     }
 
-    console.log("STEP 2 PRODUCTS:", localSelected);
     setSelectedProducts(localSelected);
     onNext();
   };
@@ -100,9 +97,7 @@ min-[1280px]:grid-cols-5
             "
           >
             {productList.map((product) => {
-              const selected = localSelected.find(
-                (p) => p.product === product
-              );
+              const selected = localSelected.find((p) => p.product === product);
 
               return (
                 <button
@@ -110,9 +105,10 @@ min-[1280px]:grid-cols-5
                   type="button"
                   onClick={() => toggleProduct(product)}
                   className={`
-flex flex-col items-center justify-between
-min-h-[90px]
-                    
+                    flex flex-col 
+                    items-center
+                    justify-between
+                    min-h-[90px] 
                     px-3 py-3
                     text-xs sm:text-sm
                     font-semibold
@@ -149,11 +145,11 @@ min-h-[90px]
             })}
           </div>
 
-          {error && (
-            <p className="text-red-500 text-[12px] mt-2">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-[12px] mt-2">{error}</p>}
         </div>
-
+<h2 className=" text-[9px] font-semibold text-gray-600">
+          Important: Ensure Selected Products Before Move to Next Step
+        </h2>
         <hr className="mb-6 border-gray-200" />
 
         <div className="flex justify-between">

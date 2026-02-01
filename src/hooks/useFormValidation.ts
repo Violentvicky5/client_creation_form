@@ -13,7 +13,9 @@ function useFormValidation<T extends Record<string, any>>(
     useState<Partial<Record<keyof T, string>>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+) => {
     const { name, value } = e.target;
 
     const updatedValues = {

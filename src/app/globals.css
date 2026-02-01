@@ -65,3 +65,53 @@ body {
   font-size: 12px;
   color: #f87171; /* red label when error */
 }
+
+
+/* ================================
+   Floating Label – SELECT support
+   (append-only)
+   ================================ */
+
+/* Match input look */
+.floating-label select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-family: inherit;
+  background-color: #ffffff;
+
+  /* remove native arrow */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Valid / filled state (blue) */
+.floating-label select:focus:not(.error),
+.floating-label select:not([value=""]):not(.error) {
+  border: 2px solid #1f48fd;
+}
+
+/* Float label for select */
+.floating-label select:focus:not(.error) ~ label,
+.floating-label select:not([value=""]):not(.error) ~ label {
+  top: -1px;
+  font-size: 12px;
+  color: #0834f8;
+}
+
+/* Error state (red) */
+.floating-label select.error,
+.floating-label select.error:focus {
+  border-color: #f87171;
+}
+
+/* Error label */
+.floating-label select.error ~ label {
+  top: -1px;
+  font-size: 12px;
+  color: #f87171;
+}

@@ -1,46 +1,212 @@
-'use client';
+"use client";
 
-type StepFourPageProps = {
+import useFormValidation from "@/hooks/useFormValidation";
+import { CompanyFormValues } from "@/app/client-creation-form/type/step1form";
+
+/* ================= TYPES ================= */
+
+type StepFourProps = {
+  values: CompanyFormValues["admin_info"];
+  setValues: React.Dispatch<React.SetStateAction<CompanyFormValues>>;
   onPrevious: () => void;
   onNext?: () => void;
 };
 
-export default function StepThree({
-  onNext,
+/* ================= VALIDATION ================= */
+
+const validateStepFour = (
+  values: CompanyFormValues["admin_info"]
+) => {
+  const errors: Partial<Record<keyof CompanyFormValues["admin_info"], string>> =
+    {};
+
+  if (!values.firstName.trim()) errors.firstName = "First name is required";
+  if (!values.lastName.trim()) errors.lastName = "Last name is required";
+
+  if (!values.phone.trim())
+    errors.phone = "Phone number is required";
+  else if (!/^\d{10}$/.test(values.phone))
+    errors.phone = "Phone number must be 10 digits";
+
+  if (!values.email.trim())
+    errors.email = "Email is required";
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))
+    errors.email = "Invalid email address";
+
+  if (!values.password)
+    errors.password = "Password is required";
+  else if (values.password.length < 6)
+    errors.password = "Password must be at least 6 characters";
+
+  if (!values.confirmPassword)
+    errors.confirmPassword = "Confirm password is required";
+  else if (values.confirmPassword !== values.password)
+    errors.confirmPassword = "Passwords do not match";
+
+  return errors;
+};
+
+/* ================= COMPONENT ================= */
+
+export default function StepFour({
+  values,
+  setValues,
   onPrevious,
-}: StepFourPageProps) {
+  onNext,
+}: StepFourProps) {
+
+  // ✅ scoped setter for admin_info (CRITICAL FIX)
+  const setAdminInfoValues = (
+    updater: React.SetStateAction<CompanyFormValues["admin_info"]>
+  ) => {
+    setValues((prev) => ({
+      ...prev,
+      admin_info:
+        typeof updater === "function"
+          ? updater(prev.admin_info)
+          : updater,
+    }));
+  };
+
+  const { errors, handleChange, handleSubmit } =
+    useFormValidation(
+      values,
+      setAdminInfoValues,
+      validateStepFour
+    );
+
   return (
     <div className="min-h-screen flex justify-center py-6 mt-2">
-      <div className="w-full max-w-[1200px] bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow-md">
-        <h2 className="mb-6 text-sm font-semibold text-gray-800 sm:text-base lg:text-lg">
-          Step 4 – final
+      <form
+        onSubmit={handleSubmit(() => onNext?.())}
+        className="w-full max-w-[1200px] bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow-md"
+      >
+        <h2 className="mb-2 text-xs font-semibold text-gray-600">
+          Create Admin Info
         </h2>
 
-        <div className="mb-10 text-sm text-gray-600">
-        final content here
+        <hr className="my-3 border-gray-200" />
+
+        <div className="grid gap-4 grid-cols-2 min-[768px]:grid-cols-3 min-[1024px]:grid-cols-4">
+          <FloatingInput
+            id="firstName"
+            name="firstName"
+            label="First Name"
+            value={values.firstName}
+            onChange={handleChange}
+            error={errors.firstName}
+          />
+
+          <FloatingInput
+            id="lastName"
+            name="lastName"
+            label="Last Name"
+            value={values.lastName}
+            onChange={handleChange}
+            error={errors.lastName}
+          />
+
+          <FloatingInput
+            id="phone"
+            name="phone"
+            label="Phone Number"
+            value={values.phone}
+            onChange={handleChange}
+            error={errors.phone}
+          />
+
+          <FloatingInput
+            id="email"
+            name="email"
+            label="Email"
+            value={values.email}
+            onChange={handleChange}
+            error={errors.email}
+          />
+
+          <FloatingInput
+            id="password"
+            name="password"
+            type="password"
+            label="Password"
+            value={values.password}
+            onChange={handleChange}
+            error={errors.password}
+          />
+
+          <FloatingInput
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            label="Confirm Password"
+            value={values.confirmPassword}
+            onChange={handleChange}
+            error={errors.confirmPassword}
+          />
         </div>
+
+        <hr className="my-6 border-gray-200" />
 
         <div className="flex justify-between">
-        <button
-        type="button"
-        onClick={onPrevious}
+          <button
+            type="button"
+            onClick={onPrevious}
             className="w-16 h-7 py-1.5 bg-gray-500 text-white rounded text-xs hover:bg-gray-400 transition"
-      >
-        Previous
-      </button>
+          >
+            Previous
+          </button>
 
-      {/* Next button — render ONLY if provided */}
-      {onNext && (
-        <button
-          type="button"
-          onClick={onNext}
-          className="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700"
-        >
-          Next
-        </button>
-      )}
+          {onNext && (
+            <button
+              type="submit"
+              className="w-20 h-7 py-1.5 bg-blue-700 text-white rounded text-xs hover:bg-blue-600 transition"
+            >
+              Submit
+            </button>
+          )}
         </div>
+      </form>
+    </div>
+  );
+}
+
+/* ================= FLOATING INPUT ================= */
+
+function FloatingInput({
+  id,
+  name,
+  label,
+  value,
+  onChange,
+  error,
+  type = "text",
+}: {
+  id: string;
+  name: string;
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
+  type?: string;
+}) {
+  return (
+    <div>
+      <div className="floating-label">
+        <input
+          id={id}
+          name={name}
+          type={type}
+          value={value}
+          onChange={onChange}
+          placeholder=" "
+          className={error ? "error" : ""}
+        />
+        <label htmlFor={id}>{label}</label>
       </div>
+
+      {error && (
+        <p className="text-red-500 text-[10px] mt-1">{error}</p>
+      )}
     </div>
   );
 }
