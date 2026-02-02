@@ -46,8 +46,6 @@ const validateStepFour = (values: AdminInfo) => {
   return errors;
 };
 
-/* ================= COMPONENT ================= */
-
 export default function StepFour({
   values,
   setValues,
@@ -76,65 +74,94 @@ export default function StepFour({
 
         <hr className="my-3 border-gray-200" />
 
-        <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <FloatingInput
-            id="firstName"
-            name="firstName"
-            label="First Name"
-            value={values.firstName}
-            onChange={handleChange}
-            error={errors.firstName}
-          />
+       <div
+  className="
+    grid
+    gap-1
+    grid-cols-1
+    min-[426px]:grid-cols-4
+  "
+>
+  {/* First Name */}
+  <div className="min-[426px]:col-span-2">
+    <FloatingInput
+      id="firstName"
+      name="firstName"
+      label="First Name"
+      value={values.firstName}
+      onChange={handleChange}
+      error={errors.firstName}
+    />
+  </div>
 
-          <FloatingInput
-            id="lastName"
-            name="lastName"
-            label="Last Name"
-            value={values.lastName}
-            onChange={handleChange}
-            error={errors.lastName}
-          />
+  {/* Last Name */}
+  <div className="min-[426px]:col-span-2">
+    <FloatingInput
+      id="lastName"
+      name="lastName"
+      label="Last Name"
+      value={values.lastName}
+      onChange={handleChange}
+      error={errors.lastName}
+    />
+  </div>
 
-          <FloatingInput
-            id="phone"
-            name="phone"
-            label="Phone Number"
-            value={values.phone}
-            onChange={handleChange}
-            error={errors.phone}
-          />
+  {/* Phone Number (¼ width) */}
+  <div className="min-[426px]:col-span-1">
+    <FloatingInput
+      id="phone"
+      name="phone"
+      label="Phone Number"
+      value={values.phone}
+      onChange={handleChange}
+      error={errors.phone}
+    />
+  </div>
 
-          <FloatingInput
-            id="email"
-            name="email"
-            label="Email"
-            value={values.email}
-            onChange={handleChange}
-            error={errors.email}
-          />
+  {/* Email (¾ width) */}
+  <div className="min-[426px]:col-span-3">
+    <FloatingInput
+      id="email"
+      name="email"
+      label="Email"
+      value={values.email}
+      onChange={handleChange}
+      error={errors.email}
+    />
+  </div>
 
-          <FloatingInput
-            id="password"
-            name="password"
-            type="password"
-            label="Password"
-            value={values.password}
-            onChange={handleChange}
-            error={errors.password}
-          />
+  {/* Password */}
+  <div className="min-[426px]:col-span-2">
+    <FloatingInput
+      id="password"
+      name="password"
+      type="password"
+      label="Password"
+      value={values.password}
+      onChange={handleChange}
+      error={errors.password}
+    />
+  </div>
 
-          <FloatingInput
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            label="Confirm Password"
-            value={values.confirmPassword}
-            onChange={handleChange}
-            error={errors.confirmPassword}
-          />
-        </div>
+  {/* Confirm Password */}
+  <div className="min-[426px]:col-span-2">
+    <FloatingInput
+      id="confirmPassword"
+      name="confirmPassword"
+      type="password"
+      label="Confirm Password"
+      value={values.confirmPassword}
+      onChange={handleChange}
+      error={errors.confirmPassword}
+    />
+  </div>
+</div>
+   <h2 className="mt-6 text-[9px] font-semibold text-gray-600">
+          Important: Ensure Admin Details Before Submit.
+        </h2>
+        <hr className="mb-6 border-gray-200" />
 
-        <hr className="my-6 border-gray-200" />
+        
 
         <div className="flex justify-between">
           <button

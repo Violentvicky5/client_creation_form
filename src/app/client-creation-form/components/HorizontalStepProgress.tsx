@@ -30,7 +30,7 @@ export default function HorizontalStepProgress({
 const isCompleted =
   step.id < currentStep || (step.id === 4 && isStepFourSubmitted);
           const isCurrent = step.id === currentStep;
-          const isDisabled = step.id > maxReachedStep;
+const isDisabled = isStepFourSubmitted || step.id > maxReachedStep;  // either one of em true then sets isDisbled to true
 
 
           return (
@@ -58,12 +58,12 @@ const isCompleted =
                 />
               )}
 
-              {/* Circle → Button */}
+              {/* Circle Button */}
               <button
                 type="button"
                 disabled={isDisabled}
                 onClick={() => onStepChange(step.id)}
-                className={`z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm font-semibold
+                className={`z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 text-[12px] font-semibold
                   sm:h-9 sm:w-9
                   lg:h-10 lg:w-10
                   ${

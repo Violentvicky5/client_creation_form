@@ -72,12 +72,12 @@ export default function StepThree({
         <div className="mb-10 text-sm text-gray-600">
           <div
             className="
-              grid gap-4
-              grid-cols-2
-              min-[475px]:grid-cols-3
+              grid gap-2
+              grid-cols-1
+              min-[475px]:grid-cols-2
               min-[768px]:grid-cols-3
               min-[1024px]:grid-cols-3
-              min-[1280px]:grid-cols-5
+              min-[1280px]:grid-cols-3
             "
           >
             <FloatingSelect

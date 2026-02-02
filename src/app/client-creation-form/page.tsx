@@ -7,11 +7,11 @@ import CompanyFormPage from "./components/CompanyFormPage";
 import StepTwoPage from "./components/StepTwoPage";
 import StepThree from "./components/StepThree";
 import StepFour from "./components/StepFour";
-
+import SuccessPage from "./components/greet";
 import { CompanyFormValues } from "@/app/client-creation-form/type/step1form";
 
 export default function ClientCreationFormPage() {
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [maxReachedStep, setMaxReachedStep] = useState<1 | 2 | 3 | 4>(1);
   const [isStepFourSubmitted, setIsStepFourSubmitted] = useState(false);
 
@@ -43,11 +43,14 @@ export default function ClientCreationFormPage() {
       },
     });
 
-  // FINAL SUBMIT (Step 4)
-  const handleFinalSubmit = () => {
-    console.log("FINAL CLIENT DATA:", companyFormValues);
-    setIsStepFourSubmitted(true); // turns step 4 circle blue
-  };
+
+ const handleFinalSubmit = () => {
+  console.log("client details", companyFormValues);
+
+  setIsStepFourSubmitted(true); 
+  setCurrentStep(5); 
+};
+
 
   return (
     <>
@@ -111,7 +114,7 @@ export default function ClientCreationFormPage() {
         />
       )}
 
-     {currentStep === 4 && (
+    {currentStep === 4 && (
   <StepFour
     values={companyFormValues.admin_info}
     setValues={(admin_info) =>
@@ -125,15 +128,11 @@ export default function ClientCreationFormPage() {
     }
     onPrevious={() => setCurrentStep(3)}
     setIsStepFourSubmitted={setIsStepFourSubmitted}
-    onNext={() => {
-      // ✅ FINAL DATA ACCESS HERE
-      console.log("FINAL CLIENT DATA:", companyFormValues);
-
-      // mark step 4 as completed (circle turns blue)
-      setIsStepFourSubmitted(true);
-    }}
+    onNext={handleFinalSubmit} 
   />
 )}
+
+{currentStep === 5 && <SuccessPage />}
 
     </>
   );
