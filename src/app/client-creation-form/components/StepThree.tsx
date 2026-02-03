@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import useFormValidation from '@/hooks/useFormValidation';
 import { CompanyFormValues } from '@/app/client-creation-form/type/step1form';
 
-/* ---------------- Types ---------------- */
+/* Types */
 
 type SubscriptionSettings =
   CompanyFormValues['subscription_settings'];
@@ -16,7 +16,7 @@ type StepThreeProps = {
   onPrevious: () => void;
 };
 
-/* ---------------- Validation ---------------- */
+/* Validation */
 
 const validateStepThree = (values: SubscriptionSettings) => {
   const errors: Partial<Record<keyof SubscriptionSettings, string>> = {};
@@ -31,7 +31,7 @@ const validateStepThree = (values: SubscriptionSettings) => {
   return errors;
 };
 
-/* ---------------- Component ---------------- */
+/*  Component  */
 
 export default function StepThree({
   values,
@@ -150,7 +150,7 @@ export default function StepThree({
   );
 }
 
-/* ---------------- Floating Select (custom dropdown with fixed height) ---------------- */
+/*  Floating Select  */
 
 function FloatingSelect({
   id,

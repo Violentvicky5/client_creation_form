@@ -2,8 +2,8 @@
 
 import useFormValidation from "@/hooks/useFormValidation";
 import { CompanyFormValues } from "@/app/client-creation-form/type/step1form";
-
-
+import { IoIosWarning } from "react-icons/io";
+import { AiOutlineClose } from "react-icons/ai";
 
 type Props = {
   values: CompanyFormValues["company_info"];
@@ -62,18 +62,18 @@ export default function CompanyFormPage({
     >(values, setValues, validateCompanyForm, patterns);
 
   return (
-    <div className="flex justify-center py-2">
+    <div className="flex justify-center py-0.5">
       <form
         onSubmit={handleSubmit(() => onNext())}
-        className="w-full max-w-[900px] bg-white p-4 rounded-md shadow-sm"
+        className="w-full max-w-[900px] bg-white p-4"
       >
         {/* Company Info */}
-        <div className="mb-3">
+        <div className="">
           <h2 className="mb-2 text-xs font-semibold text-gray-600">
             Company Information
           </h2>
-          <hr className="my-3 border-gray-200" />
-          <div className="grid grid-cols-1 gap-3">
+          <hr className="mb-2 border-gray-200" />
+          <div className="grid grid-cols-1 gap-1">
             <div className="col-span-1">
               <FloatingInput
                 id="companyName"
@@ -85,7 +85,7 @@ export default function CompanyFormPage({
               />
             </div>
 
-            <div className="grid grid-cols-1 min-[320px]:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 min-[320px]:grid-cols-2 gap-1">
               <FloatingInput
                 id="companyNumber"
                 name="companyNumber"
@@ -109,10 +109,10 @@ export default function CompanyFormPage({
         </div>
 
         {/* Address */}
-        <div className="mb-3 mt-6">
+        <div className="mb-2">
           <h2 className="mb-2 text-xs font-semibold text-gray-600">Address</h2>
-          <hr className="my-3 border-gray-200" />
-          <div className="grid grid-cols-1 gap-3">
+          <hr className="mb-2 border-gray-200" />
+          <div className="grid grid-cols-1 gap-1">
             <div className="col-span-1">
               <FloatingInput
                 id="StreetAddress"
@@ -124,7 +124,7 @@ export default function CompanyFormPage({
               />
             </div>
 
-            <div className="grid grid-cols-1 min-[320px]:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 min-[320px]:grid-cols-2 gap-1">
               <FloatingInput
                 id="City"
                 name="City"
@@ -198,9 +198,18 @@ function FloatingInput({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
 }) {
+  const hasValue = Boolean(value);
+
+  const handleClear = () => {
+    // create a synthetic event so your hook stays untouched
+    onChange({
+      target: { name, value: "" },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
   return (
     <div>
-      <div className="floating-label relative text-sm">
+      <div className="floating-label relative text-sm group">
         <input
           type={type}
           id={id}
@@ -208,20 +217,45 @@ function FloatingInput({
           placeholder=" "
           value={value}
           onChange={onChange}
-          className={`w-full px-2 py-1.5 text-xs border rounded focus:outline-none ${
+          className={`w-full px-2 py-1.5 pr-6 text-xs border rounded focus:outline-none ${
             error
               ? "error"
               : "focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           }`}
         />
+
         <label
           htmlFor={id}
           className="absolute left-2 top-1 text-gray-500 text-[10px] transition-all duration-200 pointer-events-none"
         >
           {label}
         </label>
+
+        {/* Cancel Icon (always mounted) */}
+        <button
+          type="button"
+          onClick={handleClear}
+          tabIndex={-1}
+          className={`
+            absolute right-2 top-1/2 -translate-y-1/2
+            transition-opacity duration-150
+            ${
+              hasValue
+                ? "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
+                : "opacity-0 pointer-events-none"
+            }
+          `}
+          aria-label="Clear input"
+        >
+          <AiOutlineClose className="text-red-600 hover:text-red-600" size={12} />
+        </button>
       </div>
-      {error && <p className="text-red-500 text-[10px] mt-1">{error}</p>}
+
+      {error && (
+        <p className="text-red-600 flex relative bottom-2 text-[9px] mt-0">
+          <IoIosWarning size={11} /> {error}
+        </p>
+      )}
     </div>
   );
 }
