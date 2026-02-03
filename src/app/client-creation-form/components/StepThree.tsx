@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useFormValidation from '@/hooks/useFormValidation';
 import { CompanyFormValues } from '@/app/client-creation-form/type/step1form';
 
@@ -39,11 +39,9 @@ export default function StepThree({
   onNext,
   onPrevious,
 }: StepThreeProps) {
-  /* local state for persistence */
   const [localValues, setLocalValues] =
     useState<SubscriptionSettings>(values);
 
-  /* sync when navigating back */
   useEffect(() => {
     setLocalValues(values);
   }, [values]);
@@ -59,7 +57,7 @@ export default function StepThree({
     <div className="min-h-screen flex justify-center py-6 mt-2">
       <form
         onSubmit={handleSubmit(() => {
-          setValues(localValues); // persist to parent
+          setValues(localValues);
           onNext();
         })}
         className="w-full max-w-[1200px] bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow-md"
@@ -152,7 +150,7 @@ export default function StepThree({
   );
 }
 
-/* ---------------- Floating Select ---------------- */
+/* ---------------- Floating Select (custom dropdown with fixed height) ---------------- */
 
 function FloatingSelect({
   id,
@@ -173,38 +171,73 @@ function FloatingSelect({
   options: { label: string; value: string }[];
   error?: string;
 }) {
+  const [open, setOpen] = useState(false);
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
+
+  const selectedLabel =
+    options.find((o) => o.value === value)?.label ?? '';
+
   return (
     <div>
       <div className="floating-label relative text-sm">
-        <select
-          id={id}
+        {/* Hidden input to drive floating label and validation */}
+        <input
+          ref={hiddenInputRef}
+          type="text"
           name={name}
           value={value}
-          onChange={onChange}
-          className={`w-full px-2 py-1.5 text-xs border rounded bg-white focus:outline-none appearance-none ${
-            error
-              ? 'error'
-              : 'focus:ring-1 focus:ring-blue-500 focus:border-blue-500'
+          placeholder=" "
+          readOnly
+          className={`absolute inset-0 w-full opacity-0 pointer-events-none ${
+            error ? 'error' : ''
           }`}
-        >
-          <option value="" disabled hidden />
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        />
 
+        {/* Visible dropdown */}
+      <div
+  id={id}
+  tabIndex={0}
+  onClick={() => setOpen((p) => !p)}
+  onFocus={() => hiddenInputRef.current?.focus()}
+  className={`w-full px-2 py-1.5 text-xs border rounded bg-white cursor-pointer
+    ${error ? 'border-red-500' : value ? 'border-blue-500' : 'border-gray-300'}
+    focus:ring-1 focus:ring-blue-500 focus:border-blue-500
+  `}
+>
+
+          {selectedLabel || '\u00A0'}
+          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
+            ▼
+          </span>
+        </div>
+
+        {/* Scrollable dropdown options */}
+        {open && (
+          <ul className="absolute z-20 mt-1 w-full bg-white border rounded shadow max-h-25 overflow-y-auto">
+            {options.map((opt) => (
+              <li
+                key={opt.value}
+                className="px-2 py-1 text-xs cursor-pointer hover:bg-blue-50"
+                onClick={() => {
+                  onChange({
+                    target: { name, value: opt.value },
+                  } as React.ChangeEvent<HTMLSelectElement>);
+                  setOpen(false);
+                }}
+              >
+                {opt.label}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Floating label */}
         <label
           htmlFor={id}
           className="absolute left-2 top-1 text-gray-500 text-[10px] transition-all duration-200 pointer-events-none"
         >
           {label}
         </label>
-
-        <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-          ▼
-        </span>
       </div>
 
       {error && <p className="text-red-500 text-[10px] mt-1">{error}</p>}

@@ -1,13 +1,7 @@
 "use client";
-
-import { useEffect, useState } from "react";
-
-type Plan = "silver" | "gold" | "platinum";
-
-type ProductWithPlan = {
-  product: string;
-  plan: Plan;
-};
+import { useState } from "react";
+import { ProductWithPlan, ProductConfig } from "@/app/client-creation-form/type/step1form";
+import { productList } from "../data/data";
 
 export default function StepTwoPage({
   onNext,
@@ -20,59 +14,49 @@ export default function StepTwoPage({
   selectedProducts: ProductWithPlan[];
   setSelectedProducts: (products: ProductWithPlan[]) => void;
 }) {
-  const productList = [
-    "HR Management",
-    "Inventory Management",
-    "CRM",
-    "Accounting",
-    "Project Management",
-    "IT Support",
-    "Sales Tracking",
-    "Marketing Tools",
-    "Customer Support",
-    "Analytics Dashboard",
-  ];
-
-  const [localSelected, setLocalSelected] =
-    useState<ProductWithPlan[]>(selectedProducts);
-
   const [error, setError] = useState("");
 
-  /* Sync when user navigates back */
-  useEffect(() => {
-    setLocalSelected(selectedProducts);
-  }, [selectedProducts]);
-
   /* Toggle product selection */
-  const toggleProduct = (product: string) => {
-    setLocalSelected((prev) => {
-      const exists = prev.find((p) => p.product === product);
+  const toggleProduct = (product: ProductConfig) => {
+    const exists = selectedProducts.find(
+      (p) => p.product === product.name
+    );
 
-      if (exists) {
-        return prev.filter((p) => p.product !== product);
-      }
-
-      return [...prev, { product, plan: "silver" }];
-    });
+    if (exists) {
+      setSelectedProducts(
+        selectedProducts.filter(
+          (p) => p.product !== product.name
+        )
+      );
+    } else {
+      setSelectedProducts([
+        ...selectedProducts,
+        {
+          product: product.name,
+          plan: product.plans[0],
+        },
+      ]);
+    }
 
     setError("");
   };
 
   /* Update plan */
-  const updatePlan = (product: string, plan: Plan) => {
-    setLocalSelected((prev) =>
-      prev.map((p) => (p.product === product ? { ...p, plan } : p)),
+  const updatePlan = (product: string, plan: string) => {
+    setSelectedProducts(
+      selectedProducts.map((p) =>
+        p.product === product ? { ...p, plan } : p
+      )
     );
   };
 
   /* Next button logic */
   const handleNext = () => {
-    if (localSelected.length === 0) {
+    if (selectedProducts.length === 0) {
       setError("Please select at least one product");
       return;
     }
 
-    setSelectedProducts(localSelected);
     onNext();
   };
 
@@ -88,20 +72,21 @@ export default function StepTwoPage({
           <div
             className="
               grid gap-4
-            grid-cols-2
-min-[475px]:grid-cols-3
-min-[768px]:grid-cols-3
-min-[1024px]:grid-cols-3
-min-[1280px]:grid-cols-5
-
+              grid-cols-2
+              min-[475px]:grid-cols-3
+              min-[768px]:grid-cols-3
+              min-[1024px]:grid-cols-3
+              min-[1280px]:grid-cols-5
             "
           >
             {productList.map((product) => {
-              const selected = localSelected.find((p) => p.product === product);
+              const selected = selectedProducts.find(
+                (p) => p.product === product.name
+              );
 
               return (
                 <button
-                  key={product}
+                  key={product.name}
                   type="button"
                   onClick={() => toggleProduct(product)}
                   className={`
@@ -124,20 +109,22 @@ min-[1280px]:grid-cols-5
                     }
                   `}
                 >
-                  <span>{product}</span>
+                  <span>{product.name}</span>
 
                   {selected && (
                     <select
                       value={selected.plan}
                       onClick={(e) => e.stopPropagation()}
                       onChange={(e) =>
-                        updatePlan(product, e.target.value as Plan)
+                        updatePlan(product.name, e.target.value)
                       }
-                      className="mt-2 w-full text-xs  text-gray-700  border border-white bg-gray-400 rounded px-2 py-1"
+                      className="mt-2 w-full text-xs text-gray-900 border border-white bg-gray-200 rounded px-2 py-1"
                     >
-                      <option value="silver">Silver</option>
-                      <option value="gold">Gold</option>
-                      <option value="platinum">Platinum</option>
+                      {product.plans.map((plan) => (
+                        <option key={plan} value={plan}>
+                          {plan}
+                        </option>
+                      ))}
                     </select>
                   )}
                 </button>
@@ -145,9 +132,12 @@ min-[1280px]:grid-cols-5
             })}
           </div>
 
-          {error && <p className="text-red-500 text-[12px] mt-2">{error}</p>}
+          {error && (
+            <p className="text-red-500 text-[12px] mt-2">{error}</p>
+          )}
         </div>
-<h2 className=" text-[9px] font-semibold text-gray-600">
+
+        <h2 className="text-[9px] font-semibold text-gray-600">
           Important: Ensure Selected Products Before Move to Next Step
         </h2>
         <hr className="mb-6 border-gray-200" />

@@ -1,12 +1,5 @@
 'use client';
-
-type HorizontalStepProgressProps = {
-  currentStep: number;
-  maxReachedStep: number;
-  onStepChange: (step: 1 | 2 | 3 | 4) => void;
-  isStepFourSubmitted:boolean;
-};
-
+import { HorizontalStepProgressProps } from "../type/step1form";
 
 const steps = [
   { id: 1, label: 'Company' },

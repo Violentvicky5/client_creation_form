@@ -15,8 +15,8 @@ export default function ClientCreationFormPage() {
   const [maxReachedStep, setMaxReachedStep] = useState<1 | 2 | 3 | 4>(1);
   const [isStepFourSubmitted, setIsStepFourSubmitted] = useState(false);
 
-  const [companyFormValues, setCompanyFormValues] =
-    useState<CompanyFormValues>({
+  const [companyFormValues, setCompanyFormValues] = useState<CompanyFormValues>(
+    {
       company_info: {
         companyName: "",
         companyNumber: "",
@@ -41,16 +41,15 @@ export default function ClientCreationFormPage() {
         password: "",
         confirmPassword: "",
       },
-    });
+    },
+  );
 
+  const handleFinalSubmit = () => {
+    console.log("client details", companyFormValues);
 
- const handleFinalSubmit = () => {
-  console.log("client details", companyFormValues);
-
-  setIsStepFourSubmitted(true); 
-  setCurrentStep(5); 
-};
-
+    setIsStepFourSubmitted(true);
+    setCurrentStep(5);
+  };
 
   return (
     <>
@@ -114,26 +113,27 @@ export default function ClientCreationFormPage() {
         />
       )}
 
-    {currentStep === 4 && (
-  <StepFour
-    values={companyFormValues.admin_info}
-    setValues={(admin_info) =>
-      setCompanyFormValues((prev) => ({
-        ...prev,
-        admin_info:
-          typeof admin_info === "function"
-            ? admin_info(prev.admin_info)
-            : admin_info,
-      }))
-    }
-    onPrevious={() => setCurrentStep(3)}
-    setIsStepFourSubmitted={setIsStepFourSubmitted}
-    onNext={handleFinalSubmit} 
-  />
-)}
+      {currentStep === 4 && (
+        <StepFour
+          values={companyFormValues.admin_info}
+          setValues={(admin_info) =>
+            setCompanyFormValues((prev) => ({
+              ...prev,
+              admin_info:
+                typeof admin_info === "function"
+                  ? admin_info(prev.admin_info)
+                  : admin_info,
+            }))
+          }
+          onPrevious={() => setCurrentStep(3)}
+          setIsStepFourSubmitted={setIsStepFourSubmitted}
+          onNext={handleFinalSubmit}
+        />
+      )}
 
-{currentStep === 5 && <SuccessPage />}
-
+      {currentStep === 5 && (
+        <SuccessPage clientName={companyFormValues.company_info.companyName} />
+      )}
     </>
   );
 }

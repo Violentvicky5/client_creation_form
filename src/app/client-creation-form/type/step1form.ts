@@ -1,3 +1,10 @@
+export type HorizontalStepProgressProps = {
+  currentStep: number;
+  maxReachedStep: number;
+  onStepChange: (step: 1 | 2 | 3 | 4) => void;
+  isStepFourSubmitted:boolean;
+};
+
 export type CompanyInfo = {
   companyName: string;
   companyNumber: string;
@@ -11,7 +18,12 @@ export type CompanyInfo = {
 
 export type ProductWithPlan = {
   product: string;
-  plan: "silver" | "gold" | "platinum";
+  plan: string;
+};
+
+export type ProductConfig = {
+  name: string;
+  plans: string[];
 };
 
 export type SubscriptionSettings = {
@@ -29,6 +41,9 @@ export type AdminInfo = {
   confirmPassword: string;
 };
 
+export type SuccessPageProps = {
+  clientName?: string;
+};
 
 export type CompanyFormValues = {
     company_info: CompanyInfo;

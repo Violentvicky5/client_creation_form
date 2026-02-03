@@ -3,7 +3,7 @@
 import useFormValidation from "@/hooks/useFormValidation";
 import { CompanyFormValues } from "@/app/client-creation-form/type/step1form";
 
-/* ================= TYPES ================= */
+
 
 type Props = {
   values: CompanyFormValues["company_info"];
@@ -13,7 +13,7 @@ type Props = {
   onNext: () => void;
 };
 
-/* ================= REGEX ================= */
+
 
 const patterns = {
   companyName: /^[A-Za-z\s]{5,}$/,
@@ -26,7 +26,7 @@ const patterns = {
   companyNumber: /^\d{10}$/,
 };
 
-/* ================= VALIDATION ================= */
+/*VALIDATION*/
 
 const validateCompanyForm = (
   values: CompanyFormValues["company_info"]
@@ -49,7 +49,7 @@ const validateCompanyForm = (
   return errors;
 };
 
-/* ================= COMPONENT ================= */
+/* COMPONENT  */
 
 export default function CompanyFormPage({
   values,
