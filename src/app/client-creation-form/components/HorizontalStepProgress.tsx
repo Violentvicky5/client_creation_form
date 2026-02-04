@@ -17,7 +17,7 @@ export default function HorizontalStepProgress({
  const router = useRouter();
 
   return (
-    <div className="w-full max-w-[1200px] bg-white p-4 rounded-4xl shadow-sm">
+    <div className="w-full max-w-[1200px] bg-white border border-gray-300 p-4 rounded-4xl shadow-md">
        <div className="flex justify-between">
   <span className="mb-2 text-xs font-semibold text-gray-600">
     Client Creation

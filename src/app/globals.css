@@ -58,7 +58,7 @@ body {
 .floating-label input:focus:not(.error),
 .floating-label input:not(:placeholder-shown):not(.error) {
   
-  border:2px solid #1f48fd;
+  border:1px solid #1f48fd;
 }
 
 .floating-label input:focus:not(.error) ~ label,

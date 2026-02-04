@@ -217,7 +217,7 @@ function FloatingInput({
           placeholder=" "
           value={value}
           onChange={onChange}
-          className={`w-full px-2 py-1.5 pr-6 text-xs border rounded focus:outline-none ${
+          className={`w-full px-2 py-1.5 pr-6 text-xs border  focus:outline-none ${
             error
               ? "error"
               : "focus:ring-1 focus:ring-blue-500 focus:border-blue-500"

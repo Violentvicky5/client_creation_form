@@ -76,7 +76,7 @@ export default function StepTwoPage({
               min-[475px]:grid-cols-3
               min-[768px]:grid-cols-3
               min-[1024px]:grid-cols-3
-              min-[1280px]:grid-cols-5
+              min-[1280px]:grid-cols-3
             "
           >
             {productList.map((product) => {
@@ -95,7 +95,7 @@ export default function StepTwoPage({
                     justify-between
                     min-h-[90px] 
                     px-3 py-3
-                    text-xs sm:text-sm
+                    text-xs sm:text-xs
                     font-semibold
                     rounded-lg
                     border
@@ -104,7 +104,7 @@ export default function StepTwoPage({
                     hover:scale-105 hover:shadow-lg
                     ${
                       selected
-                        ? "bg-blue-600 text-white border-blue-500"
+                        ? "bg-blue-100 text-black border-blue-300"
                         : "bg-white text-gray-700 border-gray-300"
                     }
                   `}
@@ -118,7 +118,7 @@ export default function StepTwoPage({
                       onChange={(e) =>
                         updatePlan(product.name, e.target.value)
                       }
-                      className="mt-2 w-full text-xs text-gray-900 border border-white bg-gray-200 rounded px-2 py-1"
+                      className="mt-2 w-full text-xs text-gray-900 border border-emerald-300 bg-emerald-200 rounded px-2 py-1"
                     >
                       {product.plans.map((plan) => (
                         <option key={plan} value={plan}>
