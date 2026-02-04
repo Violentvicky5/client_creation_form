@@ -10,8 +10,8 @@ const Model2Form = () => {
         <BadgeProgressBar />
       </div>
 
-      {/* Show circular stepper only for <500px */}
-      <div className="block min-[500px]:hidden">
+      {/* Show circular stepper only for 500px- do this below className="block min-[500px]:hidden"*/}
+      <div >
         <CircularStepperMobile />
       </div>
     </div>
